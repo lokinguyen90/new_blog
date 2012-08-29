@@ -1,0 +1,30 @@
+<h1>List all users</h1>
+<% @users.each do |user| %>
+    <% if current_user && current_user?(user)
+            next
+        end
+    %>
+  <div style="float:left; width:25%">
+    <div style="width:80%; margin:0 auto;">
+      <div style="margin-left:5px; height:120px;" >
+        <% if !user.avatar.nil? %>
+          <%= image_tag(user.avatar, :alt => "Sample App", :class => "round" , :style => "width:120px; height:120px;") %>
+        <% else %>
+          <%= image_tag("/images/user/default_user_icon.jpg", :alt => user.name, :class => "round") %>
+        <% end %>
+        <h1>
+        <% if current_user.admin? %>
+        <div style="margin-top:-130px; margin-left:95px;">
+          <%= link_to image_tag("/images/editdelete.png", :alt => "delete", :style => "width:30px; height:30px;") , user , :method => :delete, :confirm => "You sure?", :title => "Delete #{user.name}" %>
+        </div>
+        <% end %>
+      </div>
+      
+      <div style="text-align:center;" >
+          <%= link_to user.name, user %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div style="clear:both;"></div>

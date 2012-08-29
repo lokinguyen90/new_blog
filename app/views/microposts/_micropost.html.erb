@@ -1,0 +1,29 @@
+<tr>
+	<td style="width:50px;">
+		<% if !micropost.poster_avatar.nil? && !(micropost.poster_avatar == '') %>
+			<%= image_tag(micropost.poster_avatar, :alt => "Sample App", :class => "round" , :style => "width:50px; height:50px;") %>
+		<% else %>
+			<%= image_tag("/images/user/default_user_icon.jpg", :alt => micropost.poster, :class => "round", :style => "width:50px; height:50px;") %>
+		<% end %>
+		<% if !micropost.poster.nil? && !micropost.poster_id.nil? %>
+			<a href="/users/<%= micropost.poster_id %>" style="font-size:12px;"><%= micropost.poster %></a>
+		<% elsif !micropost.poster.nil? &&  micropost.poster_id.nil?%>
+			<span style="font-size:12px;"><%= micropost.poster %></span>
+		<% else %>
+			<span style="font-size:12px;">unknown</span>
+		<% end %>
+	</td>
+	<td class="micropost">
+		<span class="content"><%= micropost.content %></span>
+		<span class="timestamp">
+		Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+		</span>
+	</td>
+<% if current_user?(micropost.user) %>
+	<td>
+		<%= link_to "delete", micropost, :method => :delete,
+		:confirm => "You sure?",
+		:title => micropost.content %>
+	</td>
+<% end %>
+</tr>

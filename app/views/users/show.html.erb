@@ -1,0 +1,52 @@
+<table class="profile" summary="Profile information">
+	<tr>
+		<td class="main">
+			<% if !@user.avatar.nil? %>
+				<%= image_tag(@user.avatar, :alt => "Sample App", :class => "round" , :style => "width:120px; height:120px;") %>
+			<% else %>
+				<%= image_tag("/images/user/default_user_icon.jpg", :alt => @user.name, :class => "round") %>
+			<% end %>
+			<h1>
+			<%= @user.name %>
+			</h1>
+			<% unless @user.microposts.empty? %>
+				<table class="microposts" summary="User microposts">
+				<%= render @microposts %>
+				</table>
+			<% end %>
+
+			<% unless current_user?(@user)%>
+				<%= form_for @micropost do |f| %>
+					<% if @micropost.errors.any? %>
+						<div id="error_explanation">
+							<h2><%= pluralize(@micropost.errors.count, "error") %>prohibited this micropost from being saved:</h2>
+							<p>There were problems with the following fields:</p>
+							<ul>
+							<% @micropost.errors.full_messages.each do |msg| %>
+								<li><%= msg %></li>
+							<% end %>
+							</ul>
+						</div>
+					<% end %>
+					<div class="field">
+						<%= f.text_area :content %>
+						<%= f.hidden_field :user_id , :value => @user.id %>
+						<%= f.hidden_field :poster , :value => current_user.name %>
+						<%= f.hidden_field :poster_id , :value => current_user.id %>
+						<%= f.hidden_field :poster_avatar , :value => current_user.avatar %>
+					</div>
+					<div class="actions">
+						<%= f.submit "Relpy" %>
+					</div>
+				<% end %>
+			<% end %>
+
+		</td>
+		<td class="sidebar round">
+			<strong>Name</strong> <%= @user.name %><br />
+			<strong>URL</strong> <%= link_to user_path(@user), @user %><br />
+			<strong>Microposts</strong> <%= @user.microposts.count %>
+		</td>
+	</tr>
+</table>
+

@@ -1,0 +1,51 @@
+<div style="width:40%; float:left;">
+	<h1>Edit user</h1>
+	<%= form_for(@user) do |f| %>
+		<% if @user.errors.any? %>
+		  <div id="errorExplanation">
+		    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+		    <ul>
+		    <% @user.errors.full_messages.each do |msg| %>
+		      <li><%= msg %></li>
+		    <% end %>
+		    </ul>
+		  </div>
+		<% end %>
+		<%= f.hidden_field :type , :value => "edit" %>
+		<div class="field">
+			<%= f.label :name %><br />
+			<%= f.text_field :name %>
+		</div>
+		<div class="field">
+			<%= f.label :email %><br />
+			<%= f.text_field :email %>
+		</div>
+		<div class="field">
+			<%= f.label :password %><br />
+			<%= f.password_field :password %>
+		</div>
+		<div class="field">
+			<%= f.label :password_confirmation, "Confirmation" %><br />
+			<%= f.password_field :password_confirmation %>
+		</div>
+		<div class="actions">
+			<%= f.submit "Update" %>
+		</div>
+	<% end %>
+</div>
+
+<div style="width:40%; float:right; margin-right:20px;">
+	<h1>Edit avatar</h1>
+	<%= form_tag( upload_user_path, :multipart => true) do %>
+		<div class="field">
+			<p><label for="upload_file">Change avatar</label><br/> 
+			<%= file_field_tag "user[avatar]"%></p>
+			<%= hidden_field_tag "user[user_id]" , @user.id %>
+		</div>
+		<div class="actions">
+			<%= submit_tag "Upload" %>
+		</div>
+	<% end %>
+</div>
+
+<div style="clear:both;"></div>

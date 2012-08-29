@@ -1,0 +1,60 @@
+<% if signed_in? %>
+	<table class="front" summary="For signed-in users">
+		<tr>
+			<td class="main">
+			<h1 class="micropost">What's up?</h1>
+			<%= form_for @micropost do |f| %>
+				<% if @micropost.errors.any? %>
+					<div id="error_explanation">
+						<h2><%= pluralize(@micropost.errors.count, "error") %>prohibited this micropost from being saved:</h2>
+						<p>There were problems with the following fields:</p>
+						<ul>
+						<% @micropost.errors.full_messages.each do |msg| %>
+							<li><%= msg %></li>
+						<% end %>
+						</ul>
+					</div>
+				<% end %>
+				<div class="field">
+					<%= f.text_area :content %>
+					<%= f.hidden_field :user_id , :value => current_user.id %>
+					<%= f.hidden_field :poster , :value => current_user.name %>
+					<%= f.hidden_field :poster_id , :value => current_user.id %>
+					<%= f.hidden_field :poster_avatar , :value => current_user.avatar %>
+ 				</div>
+				<div class="actions">
+					<%= f.submit "Submit" %>
+				</div>
+			<% end %>
+			<% unless current_user.microposts.empty? %>
+				<table class="microposts" summary="User microposts">
+				<%= render current_user.microposts %>
+				</table>
+			<% else %>
+				<table class="microposts" summary="User microposts">
+					<tr><td>No post yet!</td></tr>
+				</table>
+			<% end %>
+		</td>
+		<td class="sidebar round">
+			<% if !current_user.avatar.nil? %>
+				<%= image_tag(current_user.avatar, :alt => "Sample App", :class => "round" , :style => "width:120px; height:120px;") %><br />
+			<% else %>
+				<%= image_tag("/images/user/default_user_icon.jpg", :alt => current_user.name, :class => "round") %><br/>
+			<% end %>
+			<strong>Name</strong> <%= current_user.name %><br />
+			<strong>URL</strong> <%= link_to user_path(current_user), current_user %><br />
+			<strong>Microposts</strong> <%= current_user.microposts.count %>
+		</td>
+		</tr>
+	</table>
+<% else %>
+
+<h1>Sample App</h1>
+<p>
+This is the home page for the
+<a href="http://railstutorial.org/">Ruby on Rails Tutorial</a>
+sample application.
+</p>
+<%= link_to "Sign up now!", signup_path, :class => "signup_button round" %>
+<% end %>
