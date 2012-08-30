@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authenticate, :only => [:edit, :update]
+  before_filter :authenticate, :only => [:edit, :update , :show]
   before_filter :correct_user, :only => [:edit, :update]
 
   def index
@@ -39,34 +39,18 @@ class UsersController < ApplicationController
   	@user = User.find(params[:id])
 
     user_data = params[:user]
-    edit_mod = user_data['type']
-
-    if edit_mod == "avatar" #upload avatar
-        name =  user_data['avatar'].original_filename
-        directory = "#{RAILS_ROOT}/public/images/user/"
-        # create the file path
-        #path = File.join(directory, name)
-        path =  directory + @user.id.to_s + "-" + name
-        File.open(path, "wb") { |f| f.write(user_data['avatar'].read) }
-        user_data['avatar'] = "/images/user/" + name
-        flash[:success]=user_data.inspect
-        redirect_to @user
-
-        #if @user.update_attributes(user_data)
-        #  redirect_to(@user, :notice => 'User avatar was successfully updated.')
-        #else
-        #  redirect_to(@user, :notice => 'Upload file failed!' + @user.errors.inspect)
-        #end
-        #redirect_to @user
-    else #edit invidual information
-      respond_to do |format|
-        if @user.update_attributes(params[:user])
-          format.html { redirect_to(@user, :notice => 'User profile was successfully updated.') }
-          format.xml  { head :ok }
-        else
-          format.html { render :action => "edit" }
-          format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-        end
+    #flash[:success] ="Before: "+current_user.inspect+ "\n"+remember_token.inspect+"\n"
+   #edit invidual information
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        sign_in @user
+        #flash[:success] +="after: "+current_user.inspect+ "\n"+remember_token.inspect+"\n"
+        #redirect_to root_path
+        format.html { redirect_to(@user, :notice => 'User profile was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -97,7 +81,7 @@ class UsersController < ApplicationController
     directory = "#{RAILS_ROOT}/public/images/user/"
     # create the file path
     #path = File.join(directory, name)
-    path =  directory + @user.id.to_s + "-" + name
+    path =  directory+@user.id.to_s+ "-" + name
     File.open(path, "wb") { |f| f.write(user_data['avatar'].read) }
     user_data['avatar'] = "/images/user/" + @user.id.to_s + "-" + name
     if @user.update_attributes(user_data)
