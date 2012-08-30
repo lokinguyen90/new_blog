@@ -1,6 +1,6 @@
 module ApplicationHelper
 	def title
-		base_title="Static pages"
+		base_title="Rails Mini Blog"
 		if(@title.nil?)
 			base_title
 		else
