@@ -1,7 +1,7 @@
 <table class="profile" summary="Profile information">
 	<tr>
 		<td class="main">
-			<% if !@user.avatar.nil? %>
+			<% if !@user.avatar.nil? && File::exists?("#{RAILS_ROOT}/public"+@user.avatar) %>
 				<%= image_tag(@user.avatar, :alt => "Sample App", :class => "round" , :style => "width:120px; height:120px;") %>
 			<% else %>
 				<%= image_tag("/images/user/default_user_icon.jpg", :alt => @user.name, :class => "round") %>

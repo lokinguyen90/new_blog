@@ -7,7 +7,7 @@
   <div style="float:left; width:25%">
     <div style="width:80%; margin:0 auto;">
       <div style="margin-left:5px; height:120px;" >
-        <% if !user.avatar.nil? %>
+        <% if !user.avatar.nil?  && File::exists?("#{RAILS_ROOT}/public"+user.avatar)%>
           <%= image_tag(user.avatar, :alt => "Sample App", :class => "round" , :style => "width:120px; height:120px;") %>
         <% else %>
           <%= image_tag("/images/user/default_user_icon.jpg", :alt => user.name, :class => "round") %>
